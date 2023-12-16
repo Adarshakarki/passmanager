@@ -1,0 +1,22 @@
+
+To send form data to an email, you would typically need to use a server-side script, such as PHP, to process the form data and send an email. Unfortunately, HTML alone cannot handle the sending of emails. Here's a simplified example using PHP:
+Create a new PHP file (e.g., process_form.php):
+
+<?php
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    $name = $_POST["name"];
+    $email = $_POST["email"];
+    $message = $_POST["message"];
+    $to = "your@example.com"; // Replace with your email address
+    $subject = "New Contact Form Submission";
+    $headers = "From: $email";
+    $mailBody = "Name: $name\nEmail: $email\nMessage:\n$message";
+    mail($to, $subject, $mailBody, $headers);
+}
+?>
+Replace "your@example.com" with the actual email address where you want to receive the form submissions.
+Update your HTML form action attribute to point to the PHP file:
+<form action="process_form.php" method="post">
+</form>
+This way, when the "Send Now" button is pressed, the form data will be submitted to process_form.php, which will process the data and send an email.
+Note: Ensure that your server supports PHP, and the mail() function is configured correctly. Additionally, this is a basic example, and in a production environment, you would need to implement additional security measures, such as input validation and sanitization, to prevent potential security issues.
