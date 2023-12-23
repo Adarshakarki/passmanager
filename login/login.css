@@ -1,0 +1,90 @@
+        body {
+        font-family: Arial, sans-serif;
+        background: url('https://c4.wallpaperflare.com/wallpaper/35/147/632/purple-nature-deserts-hd-art-wallpaper-preview.jpg') center/cover no-repeat;
+        margin: 0;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+    }
+    
+    .login-container {
+        background-color: rgba(255, 255, 255, 0.8);
+        padding: 20px;
+        border-radius: 20px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        width: 300px;
+        text-align: center;
+    }
+    
+    .login-container h2 {
+        color: #333;
+    }
+    
+    .login-container img {
+        max-width: 140px;
+        height: auto;
+        margin-bottom: 20px;
+    }
+    
+    .login-container label {
+        display: block;
+        margin-bottom: 1px;
+        color: #333;
+        text-align: left;
+    }
+    
+    .login-container input {
+        width: calc(105% - 22px);
+        padding: 10px;
+        margin-bottom: 10px;
+        border-radius: 10px;
+        box-sizing: border-box;
+        display: inline-block;
+        border: 1px solid #ccc;
+    }
+    
+    .login-container .password-container {
+        position: relative;
+    }
+    
+    .login-container #password {
+        width: calc(105% - 22px);
+        padding-right: 40px;
+    }
+    
+    .login-container .eye-icon {
+        position: absolute;
+        top: 45%;
+        right: 7px;
+        transform: translateY(-50%);
+        cursor: pointer;
+    }
+    
+    .login-container button,
+    .login-container .signup-button {
+        padding: 10px;
+        border: none;
+        border-radius: 25px;
+        cursor: pointer;
+        width: 100%;
+        ;
+        font-size: 16px;
+        text-decoration: none;
+    }
+    
+    .login-container button {
+        background-color: #D0A2F7;
+        color: #000000;
+        margin-bottom: 0px;
+    }
+    
+    .center-text {
+        text-align: left;
+        color: #666;
+        margin: 10px 0;
+    }
+    
+    input:focus {
+        border: 2px solid #DCBFFF;
+        outline: none;
