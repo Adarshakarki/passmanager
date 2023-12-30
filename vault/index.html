@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" integrity="sha512-1GuFJwkn5fCKFyHjKYwtpOw+F+CnLE23czAqVjAAMVb3iQ/5xHTf4V7AbxkdDgfrRj1o9YF1eA0GAV5Vud/7Dw==" crossorigin="anonymous" referrerpolicy="no-referrer"
+    />
+    <title>Vault Page</title>
+</head>
+
+<body>
+    <div id="container">
+        <div id="header">
+            <h1 id="pageTitle">Vault</h1>
+            <div id="vaultEntries">
+            </div>
+        </div>
+    </div>
+
+    <div id="buttonContainer">
+        <button id="openPopupBtn" onclick="openPopup()">+</button>
+    </div>
+
+    <div id="overlay" class="hidden"></div>
+    <!-- New overlay div -->
+
+    <div id="popup" class="hidden">
+        <div class="popup-content">
+            <button id="closePopupBtn" onclick="closePopup()">X</button>
+            <form id="vaultForm">
+                <label for="title">Title:</label>
+                <input type="text" id="title" name="title" required>
+
+                <label for="website">Website:</label>
+                <input type="text" id="website" name="website">
+
+                <label for="email">Email:</label>
+                <input type="email" id="email" name="email">
+
+                <label for="password">Password:</label>
+                <input type="password" id="password" name="password" autocomplete="off">
+
+                <label for="category">Category:</label>
+                <select id="category" name="category">
+                    <option value="website">Website</option>
+                    <option value="personal">Personal</option>
+                    <option value="work">Work</option>
+                    <option value="application">Application</option>
+                    <option value="game">Game</option>
+                </select>
+                <button type="button" onclick="saveVaultEntry()">Save</button>
+            </form>
+        </div>
+    </div>
+    <script src="script.js"></script>
+</body>
+
+</html>
