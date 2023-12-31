@@ -12,7 +12,7 @@
     <div class="login-container">
         <a href="https://imgbb.com/"><img src="https://i.ibb.co/89pRc76/Untitled-1-1-removebg-preview.png" alt="Logo" border="0"></a>
         <h2>Login</h2>
-        <form action="login.php" method="post">
+        <form id="loginForm" action="login.php" method="post">
             <label for="email">Email:</label>
             <input type="email" id="email" name="email" required>
 
@@ -23,9 +23,21 @@
                     alt="Eye Icon" onclick="togglePassword()">
             </div>
 
+            <input type="hidden" id="action" name="action" value="login">
+
             <button type="submit" class="login-button">Login</button>
+
             <p class="center-text">Don't have an account?</p>
-            <button type="button" class="signup-button">Sign Up</button>
+
+            <!-- Update the action value for the signup button -->
+            <button type="button" onclick="setSignupAction()" class="signup-button">Sign Up</button>
+
+            <script>
+                function setSignupAction() {
+                    document.getElementById('action').value = 'signup';
+                    document.getElementById('loginForm').submit();
+                }
+            </script>
         </form>
     </div>
 
