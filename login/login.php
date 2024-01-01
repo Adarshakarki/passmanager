@@ -16,7 +16,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $password = $_POST['password'];
 
         if (!$email) {
-            echo json_encode(['status' => 'error', 'message' => 'Invalid email format. Please enter a valid email address.']);
+            echo "Invalid email format. Please enter a valid email address.";
             exit;
         }
 
@@ -34,12 +34,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
             if (password_verify($password, $hashedPassword)) {
                 // Login successful
-                echo json_encode(['status' => 'success', 'message' => 'Login successful']);
+                echo json_encode(array("status" => "success", "message" => "Login successful!"));
+
+                // Redirect to a YouTube link
+                header("Location: https://youtu.be/dQw4w9WgXcQ");
                 exit;
             } else {
                 // Incorrect password
-                echo json_encode(['status' => 'error', 'message' => 'Incorrect password. Please try again.']);
-                exit;
+                echo json_encode(array("status" => "error", "message" => "Incorrect password. Please try again."));
             }
         } elseif ($checkResult->num_rows === 0 && $action === 'signup') {
             // Email doesn't exist, proceed with signup logic
@@ -50,17 +52,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
             if ($stmt->execute()) {
                 // Account created successfully
-                echo json_encode(['status' => 'success', 'message' => 'Account created successfully']);
-                exit;
+                echo json_encode(array("status" => "success", "message" => "Account created successfully!"));
             } else {
                 // Error creating account
-                echo json_encode(['status' => 'error', 'message' => 'Error creating account. Please try again later.']);
-                exit;
+                echo json_encode(array("status" => "error", "message" => "Error creating account. Please try again later."));
             }
         } else {
             // Invalid action
-            echo json_encode(['status' => 'error', 'message' => 'Invalid action.']);
-            exit;
+            echo json_encode(array("status" => "error", "message" => "Invalid action."));
         }
     }
 }

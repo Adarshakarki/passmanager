@@ -30,13 +30,14 @@ function handleResponse(response) {
 }
 
 function submitForm(action) {
-    document.getElementsByName('action')[0].value = action;
     var form = document.getElementById('loginForm');
+    var formData = new FormData(form);
+    formData.append('action', action);
 
     // Use fetch API to submit the form asynchronously
     fetch(form.action, {
             method: form.method,
-            body: new FormData(form),
+            body: formData,
         })
         .then(response => response.json())
         .then(data => handleResponse(data))
@@ -45,6 +46,5 @@ function submitForm(action) {
 
 // Function to set signup action and submit the form
 function setSignupAction() {
-    document.getElementsByName('action')[0].value = 'signup';
-    document.getElementById('loginForm').submit();
+    submitForm('signup');
 }
