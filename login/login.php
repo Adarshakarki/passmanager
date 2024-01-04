@@ -16,7 +16,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $password = $_POST['password'];
 
         if (!$email) {
-            echo "Invalid email format. Please enter a valid email address.";
+            echo "<script>alert('Invalid email format. Please enter a valid email address.');</script>";
             exit;
         }
 
@@ -28,38 +28,29 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $checkResult = $stmt->get_result();
         
         if ($checkResult->num_rows > 0 && $action === 'login') {
-            // Email exists, proceed with login logic
             $user = $checkResult->fetch_assoc();
             $hashedPassword = $user['password'];
 
             if (password_verify($password, $hashedPassword)) {
-                // Login successful
-                echo json_encode(array("status" => "success", "message" => "Login successful!"));
-
-                // Redirect to a YouTube link
+                echo "<script>alert('Login successful!');</script>";
                 header("Location: https://youtu.be/dQw4w9WgXcQ");
                 exit;
             } else {
-    // Incorrect password
-    echo '<script>alert("Incorrect password. Please try again.");</script>';
+                echo "<script>alert('Incorrect password. Please try again.');</script>";
             }
         } elseif ($checkResult->num_rows === 0 && $action === 'signup') {
-            // Email doesn't exist, proceed with signup logic
             $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
             $insertUserQuery = "INSERT INTO users (email, password) VALUES (?, ?)";
             $stmt = $conn->prepare($insertUserQuery);
             $stmt->bind_param("ss", $email, $hashedPassword);
 
             if ($stmt->execute()) {
-                // Account created successfully
-                echo json_encode(array("status" => "success", "message" => "Account created successfully!"));
+                echo "<script>alert('Account created successfully!');</script>";
             } else {
-                // Error creating account
-                echo json_encode(array("status" => "error", "message" => "Error creating account. Please try again later."));
+                echo "<script>alert('Error creating account. Please try again later.');</script>";
             }
         } else {
-            // Invalid action
-            echo json_encode(array("status" => "error", "message" => "Invalid action."));
+            echo "<script>alert('Invalid action.');</script>";
         }
     }
 }
