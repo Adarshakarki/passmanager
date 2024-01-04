@@ -1,57 +1,40 @@
-<?php
-$servername = "sql213.infinityfree.com";
-$username = "if0_35636795";
-$password = "AAPxK5bKHdJ36k";
-$dbname = "if0_35636795_Passmanager";
+<!DOCTYPE html>
+<html lang="en">
 
-$conn = new mysqli($servername, $username, $password, $dbname);
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login Page</title>
+    <link rel="stylesheet" type="text/css" href="login.css">
+</head>
 
-if ($conn->connect_error) {
-    die("Connection failed: " . $conn->connect_error);
-}
-
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    if (isset($_POST['email']) && isset($_POST['password'])) {
-        $email = filter_var($_POST['email'], FILTER_VALIDATE_EMAIL);
-        $password = $_POST['password'];
-
-        if (!$email) {
-            echo "<script>alert('Invalid email format. Please enter a valid email address.');</script>";
-            exit;
-        }
-
-        $action = $_POST['action'];
-        $checkEmailQuery = "SELECT * FROM users WHERE email = ?";
-        $stmt = $conn->prepare($checkEmailQuery);
-        $stmt->bind_param("s", $email);
-        $stmt->execute();
-        $checkResult = $stmt->get_result();
-        
-        if ($checkResult->num_rows > 0 && $action === 'login') {
-            $user = $checkResult->fetch_assoc();
-            $hashedPassword = $user['password'];
-
-            if (password_verify($password, $hashedPassword)) {
-                echo "<script>alert('Login successful!');</script>";
-                header("Location: https://youtu.be/dQw4w9WgXcQ");
-                exit;
-            } else {
-                echo "<script>alert('Incorrect password. Please try again.');</script>";
-            }
-        } elseif ($checkResult->num_rows === 0 && $action === 'signup') {
-            $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
-            $insertUserQuery = "INSERT INTO users (email, password) VALUES (?, ?)";
-            $stmt = $conn->prepare($insertUserQuery);
-            $stmt->bind_param("ss", $email, $hashedPassword);
-
-            if ($stmt->execute()) {
-                echo "<script>alert('Account created successfully!');</script>";
-            } else {
-                echo "<script>alert('Error creating account. Please try again later.');</script>";
-            }
-        } else {
-            echo "<script>alert('Invalid action.');</script>";
-        }
+<body>
+    <?php
+    // Display the notification message
+    if (!empty($notification)) {
+        echo "<script>alert('$notification');</script>";
     }
-}
-?>
+    ?>
+        <div class="login-container">
+            <a href="https://imgbb.com/"><img src="https://i.ibb.co/89pRc76/Untitled-1-1-removebg-preview.png" alt="Logo" border="0"></a>
+            <h2>Login</h2>
+            <form id="loginForm" action="login1.php" method="post">
+                <label for="email">Email:</label>
+                <input type="email" id="email" name="email" required>
+
+                <label for="password">Password:</label>
+                <div class="password-container">
+                    <input type="password" id="password" name="password" required>
+                    <img class="eye-icon" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAB4AAAAeCAYAAAA7MK6iAAAAAXNSR0IArs4c6QAAA1hJREFUSEvFl1WIVWEUhb+xuxM7wQAVEUEEsXMUW0zEF+PBQBHFV0XEBNEXA0QRAzEw8EXsAJ9EsRADFezu2mvY93Lmv+feOzNwnf0yM+ff51977Vj7TB6lZHmlhEsccA3gQ64DCoGbA1eAhcC+XIJHgcsCt4D2wB9gEnAgV+Ah4ynALqAM8AsYBZzIBXhcjccDewFl4CcwEjgFVAMmAr2AVh7cV+AV8Bq4C+yxMr0vSqDpulpMDwLlgO9e7wlApSyXKlC9txK4mck30ziJ6ZGYl9XxH4EmGS7+C2y36Vjkvimu6YBrAcc9rdGX1gJLgbrAGWu+Tn64GbjvPdHHy6Cji8Ag4EuIHAdc1S/t4c6XjHk3oLJH3xe4DtQHzloZOrjfAmAT0BU45H2gI/XHcJ+UJH4csEZonHuoXpOBfsAxq115bx6xuAY0As4Dbd1fqd0ASIR2AmP8uZ7pLC2whGO9nyoAzbJmWrYEWOO/fzbA/sDVDOAayZOear021NkXXBFlXBN4ZpdXAd4CbfxnIsqjluL8SNBqsAHOvKkzb+nn6gMF2RC4B1QHHtq4tXN9KAQ8D1CTyGYBO4KGeGM1rB08++SMLlsXN3PwFu6zzMZvNTAH2OLPZrhAFQKeD2x0h9HWJIcDkHdWP2UlNKV9ICBwCcs5QBmQLQceWw/s9r/nWha2hqkWG6lPPWP8BOgSpHqxX7LKyxANQMyH+Pi0thJcABq7g5RMAStjCkhql7IWo6zVGCPCMfByqCyhfXPmAlUt1e2qccKSbOOAK1jNNLfd3XsdIKYJawDcsJrpZ5wp7WIu8G3eK/LTnb0BKVqBxc2xpFACkYhWYjAbeOnvSAxWAB09bRIRqZhUTeIjlVKdFYDsuamgxOhpNNJ0kqmxOO0pk/8PZ6AVKSDVNGoSEDXSzOD5I2u6wcCdMD2ZloT0WGIyPSanL7zRJBIClVLFmbac5j/FivKx19NWo2ZSKdaazGTqWCme9nZFF4uxceBFAU4A1bENNNUEQOOikVNGtDgkqQ98lPabtKrBJI9aqdL23y690v2kFQc4C9mU42HOVF8yKd9wuQRWJNpyyoJwbtvXSWfPQOw4FZdZNv9pvjCkDVpCBZZrxgmclH8S/hdwicYpWypLdP4P1EOmH5QUNrUAAAAASUVORK5CYII="
+                        alt="Eye Icon" onclick="togglePassword()">
+                </div>
+                <input type="hidden" id="action" name="action" value="login">
+                <button type="submit" class="login-button">Login</button>
+                <p class="center-text">Don't have an account?</p>
+                <button type="button" onclick="setSignupAction()" class="signup-button">Sign Up</button>
+            </form>
+        </div>
+        <script src="login.js"></script>
+</body>
+
+</html>
