@@ -4,6 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet" />
     <link rel="stylesheet" href="styles.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" integrity="sha512-1GuFJwkn5fCKFyHjKYwtpOw+F+CnLE23czAqVjAAMVb3iQ/5xHTf4V7AbxkdDgfrRj1o9YF1eA0GAV5Vud/7Dw==" crossorigin="anonymous" referrerpolicy="no-referrer"
     />
@@ -36,8 +37,14 @@
                 <input type="email" id="email" name="email">
 
                 <label for="password">Password:</label>
-                <input type="password" id="password" name="password" autocomplete="off">
-
+                <div class="password-container">
+                    <div class="input-container">
+                        <input type="password" id="password" name="password" autocomplete="off">
+                        <button type="button" id="togglePassword" onclick="customTogglePasswordVisibility()" class="toggle-password-icon">
+                            <i class="bx bx-show"></i> <!-- Boxicon "eye" icon for show -->
+                        </button>
+                    </div>
+                </div>
                 <label for="category">Category:</label>
                 <select id="category" name="category">
                     <option value="website">Website</option>

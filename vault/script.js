@@ -1,3 +1,5 @@
+updateDisplayedEntries();
+
 function openPopup() {
     document.getElementById('popup').style.display = 'flex';
 }
@@ -11,16 +13,29 @@ function closePopup() {
     document.getElementById('category').value = '';
 }
 
-function togglePassword() {
+function customTogglePasswordVisibility() {
     var passwordInput = document.getElementById("password");
-    var togglePassword = document.getElementById("togglePassword");
+    var toggleButton = document.getElementById("togglePassword");
 
     if (passwordInput.type === "password") {
         passwordInput.type = "text";
-        togglePassword.textContent = "Hide";
+        toggleButton.innerHTML = '<i class="bx bx-hide"></i>';
     } else {
         passwordInput.type = "password";
-        togglePassword.textContent = "Show";
+        toggleButton.innerHTML = '<i class="bx bx-show"></i>';
+    }
+}
+
+function togglePasswordVisibility() {
+    var passwordInput = document.getElementById("editPassword");
+    var toggleButton = document.getElementById("toggleEditPasswordButton");
+
+    if (passwordInput.type === "password") {
+        passwordInput.type = "text";
+        toggleButton.innerHTML = '<i class="bx bx-hide"></i>'; // Boxicon "eye-slash" icon for hide
+    } else {
+        passwordInput.type = "password";
+        toggleButton.innerHTML = '<i class="bx bx-show"></i>'; // Boxicon "eye" icon for show
     }
 }
 
@@ -42,7 +57,12 @@ function saveVaultEntry() {
     };
 
     var existingEntries = JSON.parse(localStorage.getItem('vaultEntries')) || [];
-    existingEntries.push(entry);
+    var existingEntryIndex = existingEntries.findIndex(existingEntry => existingEntry.title === title);
+    if (existingEntryIndex !== -1) {
+        existingEntries[existingEntryIndex] = entry;
+    } else {
+        existingEntries.push(entry);
+    }
     localStorage.setItem('vaultEntries', JSON.stringify(existingEntries));
     updateDisplayedEntries();
     closePopup();
@@ -67,7 +87,6 @@ function updateDisplayedEntries() {
 }
 
 function openEntryPopup(title, website, email, password, category, entryId) {
-    // Create a new dark overlay
     var overlay = document.createElement('div');
     overlay.classList.add('overlay');
     document.body.appendChild(overlay);
@@ -84,7 +103,15 @@ function openEntryPopup(title, website, email, password, category, entryId) {
             <div class="entry-details">
                 <p><strong>Website:</strong> <input type="text" id="editWebsite" value="${website}" /></p>
                 <p><strong>Email:</strong> <input type="text" id="editEmail" value="${email}" /></p>
-                <p><strong>Password:</strong> <input type="text" id="editPassword" value="${password}" /></p>
+                <p>
+                <strong>Password:</strong>
+                <div class="password-container">
+                    <input type="password" id="editPassword" value="${password}" />
+                    <button type="button" id="toggleEditPasswordButton" onclick="togglePasswordVisibility()" class="toggle-password-icon">
+                        <i class="bx bx-show"></i> <!-- Initial icon, you can customize it -->
+                    </button>
+                </div>
+            </p>         
                 <p><strong>Category:</strong>
                     <select id="editCategory">
                         ${categoryOptions}
