@@ -31,9 +31,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $hashedPassword = $user['password'];
 
                 if (password_verify($password, $hashedPassword)) {
-                    echo '<script>alert("Login successful!"); window.location.href = "login.html";</script>';
+                    header("Location: https://www.youtube.com/watch?v=tp01-2vKT68");
                     exit(); // Terminate the script
-                } else {
+                }else {
                     echo '<script>alert("Incorrect password. Please try again."); window.location.href = "login.html";</script>';
                     exit(); // Terminate the script
                 }
