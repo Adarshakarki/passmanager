@@ -44,12 +44,13 @@ if (isset($_POST['login'])) {
     if ($result->num_rows > 0) {
         $row = $result->fetch_assoc();
         if (password_verify($password, $row['password'])) {
-            echo "<script>alert('Login successful!'); window.location.href='https://www.youtube.com';</script>";
+            echo "<script>alert('Login successful!'); console.log('Redirecting to YouTube...'); window.location.href='https://www.youtube.com';</script>";
+            exit; // Make sure to exit to prevent further script execution
         } else {
-            echo "<script>alert('Incorrect password'); window.location.href='login.html';</script>";
+            echo "<script>alert('Incorrect password'); console.log('Incorrect password'); window.location.href='login.html';</script>";
         }
     } else {
-        echo "<script>alert('User not found'); window.location.href='login.html';</script>";
+        echo "<script>alert('User not found'); console.log('User not found'); window.location.href='login.html';</script>";
     }
 }
 
