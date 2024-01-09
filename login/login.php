@@ -1,60 +1,58 @@
 <?php
+session_start();
+
 $servername = "sql213.infinityfree.com";
 $username = "if0_35636795";
 $password = "AAPxK5bKHdJ36k";
 $dbname = "if0_35636795_Passmanager";
 
+// Create connection
 $conn = new mysqli($servername, $username, $password, $dbname);
 
+// Check connection
 if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
 }
 
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    if (isset($_POST['email']) && isset($_POST['password'])) {
-        $email = filter_var($_POST['email'], FILTER_VALIDATE_EMAIL);
-        $password = $_POST['password'];
+// Function to sanitize input data
+function sanitize_input($data) {
+    return htmlspecialchars(stripslashes(trim($data)));
+}
 
-        if (!$email) {
-            echo '<script>alert("Invalid email format. Please enter a valid email address."); window.location.href = "login.html";</script>';
-            exit(); // Terminate the script
-        } else {
-            $action = $_POST['action'];
-            $checkEmailQuery = "SELECT * FROM users WHERE email = ?";
-            $stmt = $conn->prepare($checkEmailQuery);
-            $stmt->bind_param("s", $email);
-            $stmt->execute();
-            $checkResult = $stmt->get_result();
+// Sign up
+if (isset($_POST['signup'])) {
+    $email = sanitize_input($_POST['email']);
+    $password = password_hash($_POST['password'], PASSWORD_DEFAULT);
 
-            if ($checkResult->num_rows > 0 && $action === 'login') {
-                $user = $checkResult->fetch_assoc();
-                $hashedPassword = $user['password'];
+    $sql = "INSERT INTO users (email, password) VALUES ('$email', '$password')";
 
-                if (password_verify($password, $hashedPassword)) {
-                    header("Location: https://www.youtube.com/watch?v=tp01-2vKT68");
-                    exit(); // Terminate the script
-                }else {
-                    echo '<script>alert("Incorrect password. Please try again."); window.location.href = "login.html";</script>';
-                    exit(); // Terminate the script
-                }
-            } elseif ($checkResult->num_rows === 0 && $action === 'signup') {
-                $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
-                $insertUserQuery = "INSERT INTO users (email, password) VALUES (?, ?)";
-                $stmt = $conn->prepare($insertUserQuery);
-                $stmt->bind_param("ss", $email, $hashedPassword);
-
-                if ($stmt->execute()) {
-                    echo '<script>alert("Account created successfully!"); window.location.href = "login.html";</script>';
-                    exit(); // Terminate the script
-                } else {
-                    echo '<script>alert("Error creating account. Please try again later."); window.location.href = "login.html";</script>';
-                    exit(); // Terminate the script
-                }
-            } else {
-                echo '<script>alert("Invalid action."); window.location.href = "login.html";</script>';
-                exit(); // Terminate the script
-            }
-        }
+    if ($conn->query($sql) === TRUE) {
+        echo "<script>alert('Sign up successful!'); window.location.href='login.html';</script>";
+    } else {
+        echo "<script>alert('Error: " . $sql . "<br>" . $conn->error . "'); window.location.href='login.html';</script>";
     }
 }
+
+// Login
+if (isset($_POST['login'])) {
+    $email = sanitize_input($_POST['email']);
+    $password = $_POST['password'];
+
+    $sql = "SELECT * FROM users WHERE email='$email'";
+    $result = $conn->query($sql);
+
+    if ($result->num_rows > 0) {
+        $row = $result->fetch_assoc();
+        if (password_verify($password, $row['password'])) {
+            echo "<script>alert('Login successful!'); window.location.href='https://www.youtube.com';</script>";
+        } else {
+            echo "<script>alert('Incorrect password'); window.location.href='login.html';</script>";
+        }
+    } else {
+        echo "<script>alert('User not found'); window.location.href='login.html';</script>";
+    }
+}
+
+// Close connection
+$conn->close();
 ?>
