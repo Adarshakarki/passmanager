@@ -1,38 +1,26 @@
 function togglePassword() {
-    var passwordInput = document.getElementById('password');
+    var passwordInput = document.getElementById("password");
 
-    if (passwordInput.type === 'password') {
-        passwordInput.type = 'text';
+    if (passwordInput.type === "password") {
+        passwordInput.type = "text";
     } else {
-        passwordInput.type = 'password';
+        passwordInput.type = "password";
     }
 }
 
-// Add this function to handle form submission
-function handleFormSubmission(event) {
-    event.preventDefault(); // Prevent the default form submission
-
-    var formData = new FormData(document.getElementById('loginForm'));
-
-    fetch('your_php_script.php', {
-            method: 'POST',
+function submitForm(action) {
+    var form = document.getElementById('loginForm');
+    var formData = new FormData(form);
+    formData.append('action', action);
+    fetch(form.action, {
+            method: form.method,
             body: formData,
         })
         .then(response => response.json())
-        .then(data => {
-            if (data.status === 'success') {
-                alert(data.message);
-                if (data.redirect) {
-                    window.location.href = data.redirect;
-                }
-            } else {
-                alert(data.message);
-            }
-        })
-        .catch(error => {
-            console.error('Error:', error);
-        });
+        .then(data => handleResponse(data))
+        .catch(error => console.error('Error:', error));
 }
 
-// Attach the handleFormSubmission function to the form's submit event
-document.getElementById('loginForm').addEventListener('submit', handleFormSubmission);
+function setSignupAction() {
+    submitForm('signup');
+}
