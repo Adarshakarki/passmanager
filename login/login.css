@@ -8,6 +8,14 @@ body {
     height: 100vh;
 }
 
+h1 {
+    font-size: 20px;
+    text-align: center;
+    color: #333;
+    margin-bottom: 20px;
+    cursor: default;
+}
+
 .login-container {
     background-color: rgba(255, 255, 255, 0.8);
     padding: 20px;
@@ -75,13 +83,21 @@ body {
     color: #F1EAFF;
 }
 
+input:focus {
+    border: 2px solid #DCBFFF;
+    outline: none;
+}
+
 .center-text {
     text-align: left;
     color: #666;
     margin: 10px 0;
 }
 
-input:focus {
-    border: 2px solid #DCBFFF;
-    outline: none;
+.center-text a {
+    color: #007BFF;
+}
+
+.center-text a:hover {
+    color: blue;
 }
