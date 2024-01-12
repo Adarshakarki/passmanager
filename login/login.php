@@ -1,49 +1,41 @@
 <?php
-$servername = "sql213.infinityfree.com";
-$username = "if0_35636795";
-$password = "AAPxK5bKHdJ36k";
-$dbname = "if0_35636795_Passmanager";
+// Database connection (replace with your database credentials)
+$servername = "your_servername";
+$username = "your_username";
+$password = "your_password";
+$dbname = "your_database";
+
 $conn = new mysqli($servername, $username, $password, $dbname);
+
+// Check connection
 if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
 }
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    if (isset($_POST['email']) && isset($_POST['password'])) {
-        $email = filter_var($_POST['email'], FILTER_VALIDATE_EMAIL);
-        $password = $_POST['password'];
-        if (!$email) {
-            echo '<script>alert("Invalid email format. Please enter a valid email address."); window.location.href = "login.html";</script>';
-            exit;
-        }
-        $action = $_POST['action'];
-        $checkEmailQuery = "SELECT * FROM users WHERE email = ?";
-        $stmt = $conn->prepare($checkEmailQuery);
-        $stmt->bind_param("s", $email);
-        $stmt->execute();
-        $checkResult = $stmt->get_result(); 
-        if ($checkResult->num_rows > 0 && $action === 'login') {
-            $user = $checkResult->fetch_assoc();
-            $hashedPassword = $user['password'];
-            if (password_verify($password, $hashedPassword)) {
-                echo json_encode(array("status" => "success", "message" => "Login successful!"));
-                header("Location: https://youtu.be/dQw4w9WgXcQ");
-                exit;
-            } else {
-                echo json_encode(array("status" => "error", "message" => "Incorrect password. Please try again."));
-            }
-        } elseif ($checkResult->num_rows === 0 && $action === 'signup') {
-            $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
-            $insertUserQuery = "INSERT INTO users (email, password) VALUES (?, ?)";
-            $stmt = $conn->prepare($insertUserQuery);
-            $stmt->bind_param("ss", $email, $hashedPassword);
-            if ($stmt->execute()) {
-                echo '<script>alert("Account created successfully!"); window.location.href = "login.html";</script>';
-            } else {
-                echo '<script>alert("Error creating account. Please try again later."); window.location.href = "register.html";</script>';
-            }
+
+if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['action']) && $_POST['action'] == "login") {
+    // Get user input
+    $email = $_POST['email'];
+    $password = $_POST['password'];
+
+    // SQL query to retrieve user data from the database
+    $sql = "SELECT user_id, email, password FROM users WHERE email = '$email'";
+    $result = $conn->query($sql);
+
+    if ($result->num_rows > 0) {
+        // User found, verify the password
+        $row = $result->fetch_assoc();
+        $hashedPassword = $row['password'];
+
+        if (password_verify($password, $hashedPassword)) {
+            // Password is correct, you can set up a session or redirect as needed
+            echo "Login successful! Welcome " . $row['user_id'];
         } else {
-            echo '<script>alert("Invalid action."); window.location.href = "index.html";</script>';
+            echo "Incorrect password!";
         }
+    } else {
+        echo "User not found!";
     }
 }
+
+$conn->close();
 ?>
