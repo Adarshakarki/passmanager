@@ -10,9 +10,10 @@
 
 <body>
     <div class="login-container">
-        <a href="https://imgbb.com/"><img src="https://i.ibb.co/89pRc76/Untitled-1-1-removebg-preview.png" alt="Logo" border="0"></a>
-
-        <form id="loginForm" action="login.php" method="post">
+        <a href="https://imgbb.com/">
+            <img src="https://i.ibb.co/89pRc76/Untitled-1-1-removebg-preview.png" alt="Logo" border="0">
+        </a>
+        <form action="login.php" method="post">
             <h1>Login</h1>
             <label for="email">Email</label>
             <input type="email" id="email" name="email" required>
@@ -24,7 +25,6 @@
             <button type="submit" class="login-button" name="action" value="login">Login</button>
             <p class="center-text">Don't have an account? <a href="#" onclick="toggleForms()">Sign Up here</a>.</p>
         </form>
-
         <form id="signupForm" action="signup.php" method="post" style="display: none;">
             <h1>Sign Up</h1>
             <label for="userId">User ID</label>
@@ -37,10 +37,9 @@
                 <i class='bx bx-hide eye-icon' onclick="toggleSignupPassword()"></i>
             </div>
             <button type="submit" class="signup-button" name="action" value="signup">Sign Up</button>
-            <p class="center-text">Already have an account <a href="#" onclick="toggleForms()">Login here</a>.</p>
+            <p class="center-text">Already have an account? <a href="#" onclick="toggleForms()">Login here</a>.</p>
         </form>
     </div>
-
     <script src="login.js"></script>
 </body>
 

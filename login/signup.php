@@ -1,35 +1,55 @@
 <?php
-// Database connection (replace with your database credentials)
-$servername = "localhost";
-$username = "root";
-$password = " ";
-$dbname = "logintest";
+$server = 'localhost';
+$username = 'root';
+$password = '';
+$database = 'suman';
 
-$conn = new mysqli($servername, $username, $password, $dbname);
+// Establish database connection
+$con = mysqli_connect($server, $username, $password, $database);
 
 // Check connection
-if ($conn->connect_error) {
-    die("Connection failed: " . $conn->connect_error);
-}
-
-if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['action']) && $_POST['action'] == "signup") {
-    // Get user input
+if (!$con) {
+    die("Error connecting to the database: " . mysqli_connect_error());
+} else {
+    // Get form data
     $userId = $_POST['userId'];
     $email = $_POST['signupEmail'];
     $password = $_POST['signupPassword'];
 
-    // Hash the password before storing it (for security)
-    $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
-
-    // SQL query to insert user data into the database
-    $sql = "INSERT INTO users (user_id, email, password) VALUES ('$userId', '$email', '$hashedPassword')";
-
-    if ($conn->query($sql) === TRUE) {
-        echo "Signup successful!";
+    // Validate inputs
+    if (empty($userId) || empty($email) || empty($password)) {
+        echo "All fields are required.";
+    } elseif (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+        echo "Invalid email address.";
     } else {
-        echo "Error: " . $sql . "<br>" . $conn->error;
-    }
-}
+        // Hash the password
+        $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
 
-$conn->close();
+        // Use prepared statement to prevent SQL injection
+        $sqli = "INSERT INTO fill (userid, email, password) VALUES (?, ?, ?)";
+        $stmt = mysqli_prepare($con, $sqli);
+
+        if ($stmt) {
+            // Bind parameters
+            mysqli_stmt_bind_param($stmt, 'sss', $userId, $email, $hashedPassword);
+
+            // Execute the statement
+            $result = mysqli_stmt_execute($stmt);
+
+            if ($result) {
+                echo "Form submitted successfully";
+            } else {
+                echo "Error inserting data: " . mysqli_stmt_error($stmt);
+            }
+
+            // Close the statement
+            mysqli_stmt_close($stmt);
+        } else {
+            echo "Error preparing statement: " . mysqli_error($con);
+        }
+    }
+
+    // Close the connection
+    mysqli_close($con);
+}
 ?>

@@ -1,41 +1,58 @@
 <?php
-// Database connection (replace with your database credentials)
-$servername = "localhost";
-$username = "root";
-$password = " ";
-$dbname = "logintest";
+$server = 'localhost';
+$username = 'root';
+$password = '';
+$database = 'suman';
 
-$conn = new mysqli($servername, $username, $password, $dbname);
+$con = mysqli_connect($server, $username, $password, $database);
 
-// Check connection
-if ($conn->connect_error) {
-    die("Connection failed: " . $conn->connect_error);
-}
+if (!$con) {
+    die("Error connecting to the database: " . mysqli_connect_error());
+} else {
+    if ($_SERVER["REQUEST_METHOD"] == "POST") {
+        // Validate and sanitize user input
+        $email = mysqli_real_escape_string($con, $_POST['email']);
+        $password = mysqli_real_escape_string($con, $_POST['password']);
 
-if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['action']) && $_POST['action'] == "login") {
-    // Get user input
-    $email = $_POST['email'];
-    $password = $_POST['password'];
+        // Use prepared statement to prevent SQL injection
+        $query = "SELECT * FROM fill WHERE email=?";
+        $stmt = mysqli_prepare($con, $query);
 
-    // SQL query to retrieve user data from the database
-    $sql = "SELECT user_id, email, password FROM users WHERE email = '$email'";
-    $result = $conn->query($sql);
+        if ($stmt) {
+            // Bind parameters
+            mysqli_stmt_bind_param($stmt, 's', $email);
 
-    if ($result->num_rows > 0) {
-        // User found, verify the password
-        $row = $result->fetch_assoc();
-        $hashedPassword = $row['password'];
+            // Execute the statement
+            mysqli_stmt_execute($stmt);
 
-        if (password_verify($password, $hashedPassword)) {
-            // Password is correct, you can set up a session or redirect as needed
-            echo "Login successful! Welcome " . $row['user_id'];
+            // Get result
+            $result = mysqli_stmt_get_result($stmt);
+
+            if ($row = mysqli_fetch_assoc($result)) {
+                // Verify the password
+                if (password_verify($password, $row['password'])) {
+                    // Password is correct, redirect to a secure page
+                    header("Location: https://www.youtube.com/watch?v=dQw4w9WgXcQ");
+                    exit();
+                } else {
+                    // Incorrect password
+                    echo "Login failed. Please check your credentials.";
+                }
+            } else {
+                // User does not exist
+                echo "Login failed. Please check your credentials.";
+            }
+
+            // Close the statement
+            mysqli_stmt_close($stmt);
         } else {
-            echo "Incorrect password!";
+            echo "Error preparing statement: " . mysqli_error($con);
         }
     } else {
-        echo "User not found!";
+        echo "Invalid request method.";
     }
-}
 
-$conn->close();
+    // Close the connection
+    mysqli_close($con);
+}
 ?>

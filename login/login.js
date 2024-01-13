@@ -1,16 +1,16 @@
 function toggleForms() {
-    var loginForm = document.getElementById("loginForm");
-    var signupForm = document.getElementById("signupForm");
+    var loginForm = document.querySelector('form[action="login.php"]');
+    var signupForm = document.getElementById('signupForm');
 
-    if (loginForm.style.display === "none") {
-        loginForm.style.display = "block";
-        signupForm.style.display = "none";
+    // Toggle the display property to switch between login and signup forms
+    if (loginForm.style.display === 'none' || loginForm.style.display === '') {
+        loginForm.style.display = 'block';
+        signupForm.style.display = 'none';
     } else {
-        loginForm.style.display = "none";
-        signupForm.style.display = "block";
+        loginForm.style.display = 'none';
+        signupForm.style.display = 'block';
     }
 }
-
 
 function togglePassword() {
     var passwordInput = document.getElementById("password");
