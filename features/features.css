@@ -1,6 +1,7 @@
 body {
     font-family: Arial, sans-serif;
     margin: 20px;
+    background-color: #D0A2F7;
 }
 
 h1 {
@@ -18,18 +19,18 @@ li {
 }
 
 strong {
-    color: #0066cc;
+    color: black;
 }
 
 .background-container {
     box-sizing: border-box;
     padding: 10%;
-    background-color: #DCBFFF;
+    background-color: #D0A2F7;
     border-radius: 8px;
 }
 
 header {
-    background-color: white;
+    background-color: #E5D4FF;
     color: black;
     padding: 5px;
     border-top-left-radius: 8px;
@@ -40,7 +41,7 @@ header {
 }
 
 .text-box {
-    background-color: #fff;
+    background-color: #E5D4FF;
     border-bottom-left-radius: 8px;
     border-bottom-right-radius: 8px;
     padding: 20px;
