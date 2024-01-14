@@ -1,58 +1,62 @@
 <?php
-$server = 'localhost';
-$username = 'root';
-$password = '';
-$database = 'suman';
 
-$con = mysqli_connect($server, $username, $password, $database);
+include 'db.php';
 
-if (!$con) {
-    die("Error connecting to the database: " . mysqli_connect_error());
-} else {
-    if ($_SERVER["REQUEST_METHOD"] == "POST") {
-        // Validate and sanitize user input
-        $email = mysqli_real_escape_string($con, $_POST['email']);
-        $password = mysqli_real_escape_string($con, $_POST['password']);
+class Login {
+    private $conn;
 
-        // Use prepared statement to prevent SQL injection
-        $query = "SELECT * FROM fill WHERE email=?";
-        $stmt = mysqli_prepare($con, $query);
-
-        if ($stmt) {
-            // Bind parameters
-            mysqli_stmt_bind_param($stmt, 's', $email);
-
-            // Execute the statement
-            mysqli_stmt_execute($stmt);
-
-            // Get result
-            $result = mysqli_stmt_get_result($stmt);
-
-            if ($row = mysqli_fetch_assoc($result)) {
-                // Verify the password
-                if (password_verify($password, $row['password'])) {
-                    // Password is correct, redirect to a secure page
-                    header("Location: https://www.youtube.com/watch?v=dQw4w9WgXcQ");
-                    exit();
-                } else {
-                    // Incorrect password
-                    echo "Login failed. Please check your credentials.";
-                }
-            } else {
-                // User does not exist
-                echo "Login failed. Please check your credentials.";
-            }
-
-            // Close the statement
-            mysqli_stmt_close($stmt);
-        } else {
-            echo "Error preparing statement: " . mysqli_error($con);
-        }
-    } else {
-        echo "Invalid request method.";
+    public function __construct($conn) {
+        $this->conn = $conn;
     }
 
-    // Close the connection
-    mysqli_close($con);
+    public function authenticateUser($email, $password) {
+        try {
+            // Fetch user information from the database based on the provided email
+            $sql = "SELECT user_id, email, password FROM users WHERE email = ?";
+            $stmt = $this->conn->prepare($sql);
+            $stmt->bind_param("s", $email);
+            $stmt->execute();
+            $stmt->bind_result($userId, $dbEmail, $dbPassword);
+
+            if ($stmt->fetch()) {
+                // Verify the password
+                if (password_verify($password, $dbPassword)) {
+                    // Redirect to the Rick Astley song or any other page
+                    header("Location: https://www.youtube.com/watch?v=dQw4w9WgXcQ");
+                    exit; // Ensure that no further code is executed after the redirect
+                } else {
+                    // Display an alert for incorrect password and redirect to index.html
+                    echo '<script>alert("Incorrect password"); window.location.href = "index.html";</script>';
+                }
+            } else {
+                // Display an alert for user not found and redirect to index.html
+                echo '<script>alert("User not found"); window.location.href = "index.html";</script>';
+            }
+
+            $stmt->close();
+        } catch (Exception $e) {
+            // Display an alert for any other errors and redirect to index.html
+            echo '<script>alert("Error: ' . $e->getMessage() . '"); window.location.href = "index.html";</script>';
+        }
+    }
 }
+
+// Check if the form is submitted
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    try {
+        // Get data from the form
+        $email = $_POST["email"];
+        $password = $_POST["password"];
+
+        // Create an instance of the Login class and authenticate the user
+        $login = new Login($conn);
+        $login->authenticateUser($email, $password);
+
+        $conn->close();
+    } catch (Exception $e) {
+        // Display an alert for any other errors and redirect to index.html
+        echo '<script>alert("Error: ' . $e->getMessage() . '"); window.location.href = "index.html";</script>';
+    }
+}
+
 ?>

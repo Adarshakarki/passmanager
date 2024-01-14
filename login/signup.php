@@ -1,55 +1,85 @@
 <?php
-$server = 'localhost';
-$username = 'root';
-$password = '';
-$database = 'suman';
 
-// Establish database connection
-$con = mysqli_connect($server, $username, $password, $database);
+include 'db.php';
 
-// Check connection
-if (!$con) {
-    die("Error connecting to the database: " . mysqli_connect_error());
-} else {
-    // Get form data
-    $userId = $_POST['userId'];
-    $email = $_POST['signupEmail'];
-    $password = $_POST['signupPassword'];
+class User {
+    private $userId;
+    private $email;
+    private $password;
 
-    // Validate inputs
-    if (empty($userId) || empty($email) || empty($password)) {
-        echo "All fields are required.";
-    } elseif (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-        echo "Invalid email address.";
-    } else {
-        // Hash the password
-        $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
-
-        // Use prepared statement to prevent SQL injection
-        $sqli = "INSERT INTO fill (userid, email, password) VALUES (?, ?, ?)";
-        $stmt = mysqli_prepare($con, $sqli);
-
-        if ($stmt) {
-            // Bind parameters
-            mysqli_stmt_bind_param($stmt, 'sss', $userId, $email, $hashedPassword);
-
-            // Execute the statement
-            $result = mysqli_stmt_execute($stmt);
-
-            if ($result) {
-                echo "Form submitted successfully";
-            } else {
-                echo "Error inserting data: " . mysqli_stmt_error($stmt);
-            }
-
-            // Close the statement
-            mysqli_stmt_close($stmt);
-        } else {
-            echo "Error preparing statement: " . mysqli_error($con);
-        }
+    public function __construct($userId, $email, $password) {
+        $this->userId = $userId;
+        $this->email = $email;
+        $this->password = $password;
     }
 
-    // Close the connection
-    mysqli_close($con);
+    public function getUserId() {
+        return $this->userId;
+    }
+
+    public function getEmail() {
+        return $this->email;
+    }
+
+    public function getPassword() {
+        return $this->password;
+    }
 }
+
+class SignUp {
+    private $conn;
+
+    public function __construct($conn) {
+        $this->conn = $conn;
+    }
+
+    public function registerUser($user) {
+        try {
+            // Hash password
+            $hashedPassword = password_hash($user->getPassword(), PASSWORD_DEFAULT);
+
+            // Insert new user into the database
+            $sql = "INSERT INTO users (user_id, email, password) VALUES (?, ?, ?)";
+            $stmt = $this->conn->prepare($sql);
+            $stmt->bind_param("sss", $user->getUserId(), $user->getEmail(), $hashedPassword);
+
+            if ($stmt->execute()) {
+                // Display a browser alert for successful registration and redirect to index.html
+                echo '<script>alert("New user registered successfully!"); window.location.href = "index.html";</script>';
+            } else {
+                // Display a browser alert for registration failure
+                echo '<script>alert("Error: User registration failed.");</script>';
+                // Log detailed error or handle accordingly
+            }
+
+            $stmt->close();
+        } catch (Exception $e) {
+            // Display a browser alert for any other errors
+            echo '<script>alert("Error: ' . $e->getMessage() . '"); window.location.href = "index.html";</script>';
+        }
+    }
+}
+
+// Check if the form is submitted
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    try {
+        // Get data from the form
+        $userId = $_POST["signupUserId"];
+        $email = $_POST["signupEmail"];
+        $password = $_POST["signupPassword"];
+
+        // Create an instance of the User class
+        $user = new User($userId, $email, $password);
+
+        // Create an instance of the SignUp class and register the user
+        $signUp = new SignUp($conn);
+        $signUp->registerUser($user);
+
+        $conn->close();
+    } catch (Exception $e) {
+        // Display a browser alert for any other errors and redirect to index.html
+        echo '<script>alert("Error: ' . $e->getMessage() . '"); window.location.href = "index.html";</script>';
+    }
+}
+
 ?>

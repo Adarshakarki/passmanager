@@ -5,36 +5,31 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" type="text/css" href="login.css">
-    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+    <link rel="stylesheet" type="text/css" href="https://unpkg.com/phosphor-icons/css/phosphor.css">
 </head>
 
 <body>
     <div class="login-container">
-        <a href="https://imgbb.com/">
+        <a href="https://imgbb.com/" aria-label="Logo">
             <img src="https://i.ibb.co/89pRc76/Untitled-1-1-removebg-preview.png" alt="Logo" border="0">
         </a>
         <form action="login.php" method="post">
             <h1>Login</h1>
-            <label for="email">Email</label>
-            <input type="email" id="email" name="email" required>
-            <label for="password">Password</label>
+            <input type="email" id="email" name="email" placeholder="Email" required>
             <div class="password-container">
-                <input type="password" id="password" name="password" required>
-                <i class='bx bx-hide eye-icon' onclick="togglePassword()"></i>
+                <input type="password" id="password" name="password" placeholder="Password" required>
+                <i class="ph ph-eye" onclick="togglePassword()"></i>
             </div>
             <button type="submit" class="login-button" name="action" value="login">Login</button>
             <p class="center-text">Don't have an account? <a href="#" onclick="toggleForms()">Sign Up here</a>.</p>
         </form>
         <form id="signupForm" action="signup.php" method="post" style="display: none;">
             <h1>Sign Up</h1>
-            <label for="userId">User ID</label>
-            <input type="text" id="userId" name="userId" required>
-            <label for="signupEmail">Email</label>
-            <input type="email" id="signupEmail" name="signupEmail" required>
-            <label for="signupPassword">Password</label>
+            <input type="text" id="signupUserId" name="signupUserId" placeholder="User ID" required>
+            <input type="email" id="signupEmail" name="signupEmail" placeholder="Email" required>
             <div class="password-container">
-                <input type="password" id="signupPassword" name="signupPassword" required>
-                <i class='bx bx-hide eye-icon' onclick="toggleSignupPassword()"></i>
+                <input type="password" id="signupPassword" name="signupPassword" placeholder="Password" required>
+                <i class="ph ph-eye" onclick="toggleSignupPassword()"></i>
             </div>
             <button type="submit" class="signup-button" name="action" value="signup">Sign Up</button>
             <p class="center-text">Already have an account? <a href="#" onclick="toggleForms()">Login here</a>.</p>
