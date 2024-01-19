@@ -19,11 +19,11 @@ class Login {
             $stmt->bind_result($userId, $dbEmail, $dbPassword);
 
             if ($stmt->fetch()) {
-                // Verify the password
                 if (password_verify($password, $dbPassword)) {
-                    // Redirect to the Rick Astley song or any other page
-                    header("Location: https://www.youtube.com/watch?v=dQw4w9WgXcQ");
-                    exit; // Ensure that no further code is executed after the redirect
+                    // Redirect to the homepage
+                    header("Location: homepage.html");
+                    exit(); // Make sure to exit after sending the header to ensure proper redirection
+                }                
                 } else {
                     // Display an alert for incorrect password and redirect to index.html
                     echo '<script>alert("Incorrect password"); window.location.href = "index.html";</script>';
