@@ -46,9 +46,8 @@ function saveVaultEntry() {
     var password = document.getElementById('password').value;
     var categoryElement = document.getElementById('category');
     var category = categoryElement.options[categoryElement.selectedIndex].text;
-    var entryId = Date.now();
+
     var entry = {
-        id: entryId,
         title: title,
         website: website,
         email: email,
@@ -56,148 +55,62 @@ function saveVaultEntry() {
         category: category
     };
 
-    var existingEntries = JSON.parse(localStorage.getItem('vaultEntries')) || [];
-    var existingEntryIndex = existingEntries.findIndex(existingEntry => existingEntry.title === title);
-    if (existingEntryIndex !== -1) {
-        existingEntries[existingEntryIndex] = entry;
-    } else {
-        existingEntries.push(entry);
-    }
-    localStorage.setItem('vaultEntries', JSON.stringify(existingEntries));
-    updateDisplayedEntries();
-    closePopup();
-}
-
-function updateDisplayedEntries() {
-    var existingEntries = JSON.parse(localStorage.getItem('vaultEntries')) || [];
-    var vaultEntriesContainer = document.getElementById('vaultEntries');
-    vaultEntriesContainer.innerHTML = '';
-    existingEntries.forEach(function(entry) {
-        var entryContainer = document.createElement('div');
-        entryContainer.classList.add('entry-container');
-        entryContainer.setAttribute('data-entry-id', entry.id);
-        var entryButton = document.createElement('button');
-        entryButton.innerHTML = `<strong>${entry.title}</strong><br>${entry.email}`;
-        entryButton.addEventListener('click', function() {
-            openEntryPopup(entry.title, entry.website, entry.email, entry.password, entry.category, entry.id);
+    fetch('save_entry.php', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(entry)
+        })
+        .then(response => {
+            if (response.ok) {
+                // Entry saved successfully, add it to the popup
+                addEntryToPopup(entry);
+                closePopup(); // Close the popup after saving
+            } else {
+                // Failed to save entry, handle error
+                console.error('Failed to save entry');
+            }
+        })
+        .catch(error => {
+            console.error('Error saving entry:', error);
         });
-        entryContainer.appendChild(entryButton);
-        vaultEntriesContainer.appendChild(entryContainer);
+}
+
+function addEntryToPopup(entry) {
+    var entryButton = document.createElement('button');
+    entryButton.classList.add('entry-button');
+    entryButton.textContent = entry.title + ' - ' + entry.email;
+
+    // Create a div to hold the entry data
+    var entryData = document.createElement('div');
+    entryData.classList.add('entry-data');
+    entryData.style.display = 'none'; // Hide the entry data initially
+
+    // Add data elements to the entryData div
+    var websitePara = document.createElement('p');
+    websitePara.textContent = 'Website: ' + entry.website;
+    entryData.appendChild(websitePara);
+
+    var passwordPara = document.createElement('p');
+    passwordPara.textContent = 'Password: ' + entry.password;
+    entryData.appendChild(passwordPara);
+
+    var categoryPara = document.createElement('p');
+    categoryPara.textContent = 'Category: ' + entry.category;
+    entryData.appendChild(categoryPara);
+
+    // Append the entryData div to the entryButton
+    entryButton.appendChild(entryData);
+
+    // Toggle visibility of entry data when the button is clicked
+    entryButton.addEventListener('click', function() {
+        if (entryData.style.display === 'none') {
+            entryData.style.display = 'block';
+        } else {
+            entryData.style.display = 'none';
+        }
     });
-}
 
-function openEntryPopup(title, website, email, password, category, entryId) {
-    var overlay = document.createElement('div');
-    overlay.classList.add('overlay');
-    document.body.appendChild(overlay);
-    var entryPopup = document.createElement('div');
-    entryPopup.classList.add('entry-popup');
-    entryPopup.setAttribute('data-entry-id', entryId);
-    var categories = ['Website', 'Personal', 'Work', 'Application', 'Game'];
-    var categoryOptions = categories.map(cat => `<option value="${cat}" ${cat === category ? 'selected' : ''}>${cat}</option>`).join('');
-    entryPopup.innerHTML = `
-        <div class="entry-container">
-            <div class="entry-header">
-            <p><strong>Title:</strong> <input type="text" id="editTitle" value="${title}" /><br />
-            </div>
-            <div class="entry-details">
-                <p><strong>Website:</strong> <input type="text" id="editWebsite" value="${website}" /></p>
-                <p><strong>Email:</strong> <input type="text" id="editEmail" value="${email}" /></p>
-                <p>
-                <strong>Password:</strong>
-                <div class="password-container">
-                    <input type="password" id="editPassword" value="${password}" />
-                    <button type="button" id="toggleEditPasswordButton" onclick="togglePasswordVisibility()" class="toggle-password-icon">
-                        <i class="bx bx-show"></i> <!-- Initial icon, you can customize it -->
-                    </button>
-                </div>
-            </p>         
-                <p><strong>Category:</strong>
-                    <select id="editCategory">
-                        ${categoryOptions}
-                    </select>
-                </p>
-            </div>
-            <div class="entry-footer">
-                <button class="edit-button" onclick="saveEditedEntry(${entryId})">Save</button>
-                <button class="delete-button" onclick="deleteEntry(${entryId})">Delete</button>
-                <button class="close-button" onclick="closeEntryPopup(${entryId})">X</button>
-            </div>
-        </div>
-    `;
-    document.body.appendChild(entryPopup);
-    var editCategoryDropdown = document.getElementById('editCategory');
-    editCategoryDropdown.value = category;
-    editCategoryDropdown.addEventListener('change', function() {
-        category = editCategoryDropdown.value;
-    });
-    window.closeEntryPopup = function(id) {
-        var entryOverlay = document.querySelector(`.overlay[data-entry-id="${id}"]`);
-        var entryPopup = document.querySelector(`.entry-popup[data-entry-id="${id}"]`);
-
-        document.body.removeChild(entryOverlay);
-        document.body.removeChild(entryPopup);
-
-        window.closeEntryPopup = null;
-    };
-    overlay.setAttribute('data-entry-id', entryId);
-    entryPopup.setAttribute('data-entry-id', entryId);
-}
-
-function saveEditedEntry(entryId) {
-    var editedTitle = document.getElementById('editTitle').value;
-    var editedWebsite = document.getElementById('editWebsite').value;
-    var editedEmail = document.getElementById('editEmail').value;
-    var editedPassword = document.getElementById('editPassword').value;
-    var editedCategory = document.getElementById('editCategory').value;
-    var existingEntries = JSON.parse(localStorage.getItem('vaultEntries')) || [];
-    var entryIndex = existingEntries.findIndex(entry => entry.id === entryId);
-
-    if (entryIndex !== -1) {
-        existingEntries[entryIndex] = {
-            id: entryId,
-            title: editedTitle,
-            website: editedWebsite,
-            email: editedEmail,
-            password: editedPassword,
-            category: editedCategory
-        };
-        localStorage.setItem('vaultEntries', JSON.stringify(existingEntries));
-        updateDisplayedEntry(entryId, editedTitle, editedEmail);
-    }
-    closeEntryPopup(entryId);
-}
-
-function updateDisplayedEntry(entryId, editedTitle, editedEmail) {
-    var entryContainer = document.querySelector(`.entry-container[data-entry-id="${entryId}"]`);
-    if (entryContainer) {
-        var entryButton = entryContainer.querySelector('button');
-        entryButton.innerHTML = `<strong>${editedTitle}</strong><br>${editedEmail}`;
-    }
-}
-
-function closeEntryPopup(id) {
-    var entryOverlay = document.querySelector(`.overlay[data-entry-id="${id}"]`);
-    var entryPopup = document.querySelector(`.entry-popup[data-entry-id="${id}"]`);
-
-    if (entryOverlay && entryPopup) {
-        document.body.removeChild(entryOverlay);
-        document.body.removeChild(entryPopup);
-    }
-    window.closeEntryPopup = null;
-}
-
-function deleteEntry(entryId) {
-    var entryContainer = document.querySelector(`.entry-container[data-entry-id="${entryId}"]`);
-    var entryOverlay = document.querySelector(`.overlay[data-entry-id="${entryId}"]`);
-    var entryPopup = document.querySelector(`.entry-popup[data-entry-id="${entryId}"]`);
-
-    if (entryContainer && entryOverlay && entryPopup) {
-        entryContainer.remove();
-        document.body.removeChild(entryOverlay);
-        document.body.removeChild(entryPopup);
-    }
-    var existingEntries = JSON.parse(localStorage.getItem('vaultEntries')) || [];
-    var updatedEntries = existingEntries.filter(entry => entry.id !== entryId);
-    localStorage.setItem('vaultEntries', JSON.stringify(updatedEntries));
+    document.getElementById('popup').appendChild(entryButton);
 }
