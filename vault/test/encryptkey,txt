@@ -1,1 +1,10 @@
+The $encryptionKey in the provided PHP code is a variable used to store the encryption key used for encrypting and decrypting passwords. 
+You need to define this variable with a secure key that you'll use for encryption and decryption. Here's how you can define it:
 
+$encryptionKey = "YourEncryptionKey";
+Replace "YourEncryptionKey" with a strong, random string of characters. Make sure it's long and complex enough to provide sufficient security. For example:
+
+Example: 
+php
+$encryptionKey = "ThisIsAStrongEncryptionKey123!@#";
+Remember to keep this key secret and do not expose it in your code or share it publicly. It's crucial for the security of your encryption mechanism.
