@@ -1,4 +1,6 @@
 <?php
+session_start(); // Start session
+
 $server = 'sql213.infinityfree.com';
 $username = 'if0_35636795';
 $password = 'uJLWwhDrZt2';
@@ -27,9 +29,14 @@ $encryptionKey = "YourEncryptionKey"; // Change this to your own encryption key
 
 // Check if the request is POST (for inserting data)
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    // Check if user is logged in
+    if (!isset($_SESSION['user_id'])) {
+        die("User not logged in.");
+    }
+
     // Insert data into database
-    $stmt = $conn->prepare("INSERT INTO vault (title, website, email, passwd, category) VALUES (?, ?, ?, ?, ?)");
-    $stmt->bind_param("sssss", $title, $website, $email, $encryptedPasswd, $category);
+    $stmt = $conn->prepare("INSERT INTO vault (user_id, title, website, email, passwd, category) VALUES (?, ?, ?, ?, ?, ?)");
+    $stmt->bind_param("isssss", $_SESSION['user_id'], $title, $website, $email, $encryptedPasswd, $category);
 
     // Set parameters
     $title = $_POST["title"];
@@ -52,25 +59,28 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $stmt->close();
 }
 
-// Retrieve data from the database
-$sql = "SELECT title, website, email, passwd FROM vault";
-$result = $conn->query($sql);
+// Retrieve data from the database associated with the current session's user ID
+if (isset($_SESSION['user_id'])) {
+    $sql = "SELECT title, website, email, passwd FROM vault WHERE user_id = ?";
+    $stmt = $conn->prepare($sql);
+    $stmt->bind_param("i", $_SESSION['user_id']);
+    $stmt->execute();
+    $stmt->bind_result($title, $website, $email, $encryptedPasswd);
 
-// Check if any rows were returned
-if ($result->num_rows > 0) {
-    // Output data of each row
     echo "<h2>Data from the Database:</h2>";
     echo "<table border='1'>";
     echo "<tr><th>Title</th><th>Website</th><th>Email</th><th>Password</th></tr>";
-    while ($row = $result->fetch_assoc()) {
+    while ($stmt->fetch()) {
         // Decrypt password
-        $decryptedPasswd = decryptPassword($row["passwd"], $encryptionKey);
+        $decryptedPasswd = decryptPassword($encryptedPasswd, $encryptionKey);
         // Output decrypted password in the table
-        echo "<tr><td>" . $row["title"] . "</td><td>" . $row["website"] . "</td><td>" . $row["email"] . "</td><td>" . $decryptedPasswd . "</td></tr>";
+        echo "<tr><td>" . $title . "</td><td>" . $website . "</td><td>" . $email . "</td><td>" . $decryptedPasswd . "</td></tr>";
     }
     echo "</table>";
+
+    $stmt->close();
 } else {
-    echo "<p>No data found.</p>";
+    echo "<p>User not logged in.</p>";
 }
 
 $conn->close();
