@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Minimalist Notes Application</title>
+    <link rel="stylesheet" href="notes.css">
+</head>
+
+<body>
+    <div class="container">
+        <header>Notes</header>
+        <div id="notesGrid"></div>
+        <button id="addNoteBtn" class="fab">+</button>
+    </div>
+
+    <div id="modal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <input type="text" id="noteTitle" placeholder="Enter title">
+            <textarea id="noteContent" placeholder="Enter your note here"></textarea>
+            <button id="saveNoteBtn">Save</button>
+        </div>
+    </div>
+
+    <script src="notes.js"></script>
+</body>
+
+</html>
