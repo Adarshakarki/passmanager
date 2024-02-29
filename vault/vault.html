@@ -4,54 +4,45 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet" />
     <link rel="stylesheet" href="vault.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" integrity="sha512-1GuFJwkn5fCKFyHjKYwtpOw+F+CnLE23czAqVjAAMVb3iQ/5xHTf4V7AbxkdDgfrRj1o9YF1eA0GAV5Vud/7Dw==" crossorigin="anonymous" referrerpolicy="no-referrer"
-    />
     <title>Vault Page</title>
 </head>
 
 <body>
 
-    <h1 id="pageTitle">Vault</h1>
+    <!-- Plus button to open popup -->
+    <button id="openPopup" class="plus-button">+</button>
 
-    <div id="savedDataContainer">
-        <!-- Saved data table will be injected here -->
+    <!-- Popup form -->
+    <div class="overlay" id="overlay"></div>
+    <div class="popup" id="popup">
+        <button id="closePopup" class="close-button">x</button>
+        <h1 id="pageTitle">Vault</h1>
+        <form id="vaultForm" action="vault.php" method="post">
+            <label for="title">Title:</label>
+            <input type="text" id="title" name="title" required><br>
+
+            <label for="website">Website:</label>
+            <input type="text" id="website" name="website"><br>
+
+            <label for="email">Email:</label>
+            <input type="email" id="email" name="email"><br>
+
+            <label for="password">Password:</label>
+            <input type="password" id="passwd" name="passwd"><br>
+            <label for="category">Category:</label>
+            <select id="category" name="category">
+                <option value="website">Website</option>
+                <option value="personal">Personal</option>
+                <option value="work">Work</option>
+                <option value="application">Application</option>
+                <option value="game">Game</option>
+            </select>
+            <input type="submit" value="Submit">
+        </form>
     </div>
 
-    <div class="popup-container">
-        <button id="addButton" class="add-button">+</button>
-        <div class="popup-overlay" id="popupOverlay"></div>
-        <div class="popup-content" id="popupContent">
-            <span class="close" id="closePopup">&times;</span>
-            <form id="vaultForm" action="vault.php" method="post">
-                <label for="title">Title:</label>
-                <input type="text" id="title" name="title" required><br>
-
-                <label for="website">Website:</label>
-                <input type="text" id="website" name="website"><br>
-
-                <label for="email">Email:</label>
-                <input type="email" id="email" name="email"><br>
-
-                <label for="password">Password:</label>
-                <div class="password-field">
-                    <input type="password" id="passwd" name="passwd">
-                    <button type="button" class="toggle-password" id="togglePassword"><i class='bx bx-show'></i></button>
-                </div>
-                <label for="category">Category:</label>
-                <select id="category" name="category">
-                    <option value="website">Website</option>
-                    <option value="personal">Personal</option>
-                    <option value="work">Work</option>
-                    <option value="application">Application</option>
-                    <option value="game">Game</option>
-                </select>
-                <input type="submit" value="Submit">
-            </form>
-        </div>
-    </div>
-
+    <!-- Include JavaScript file -->
     <script src="vault.js"></script>
 </body>
 
