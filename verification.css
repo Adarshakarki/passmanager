@@ -1,0 +1,66 @@
+body {
+    font-family: Arial, sans-serif;
+    background: url('https://c4.wallpaperflare.com/wallpaper/35/147/632/purple-nature-deserts-hd-art-wallpaper-preview.jpg') center/cover no-repeat;
+    margin: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+h2 {
+    font-size: 14px;
+    text-align: center;
+    color: #333;
+    margin-bottom: 20px;
+    cursor: default;
+}
+
+.verify-container {
+    background-color: rgba(255, 255, 255, 0.8);
+    padding: 20px;
+    border-radius: 20px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    width: 300px;
+    text-align: center;
+}
+
+.verify-container label {
+    display: block;
+    margin-bottom: 1px;
+    color: black;
+    text-align: left;
+}
+
+.verify-container input {
+    width: calc(100%);
+    padding: 10px;
+    margin-bottom: 10px;
+    border-radius: 10px;
+    box-sizing: border-box;
+    display: inline-block;
+    border: 1px solid #ccc;
+}
+
+.verify-container button {
+    padding: 10px;
+    border: none;
+    border-radius: 25px;
+    cursor: pointer;
+    width: 100%;
+    font-size: 16px;
+    text-decoration: none;
+    background-color: #D0A2F7;
+    color: #000000;
+    margin-bottom: 0px;
+}
+
+.verify-container button:hover {
+    background-color: #9C73C9;
+    color: #F1EAFF;
+}
+
+input:focus {
+    border: 2px solid #DCBFFF;
+    outline: none;
+}

@@ -1,0 +1,100 @@
+body {
+    font-family: Arial, sans-serif;
+    background: url('https://c4.wallpaperflare.com/wallpaper/35/147/632/purple-nature-deserts-hd-art-wallpaper-preview.jpg') center/cover no-repeat;
+    margin: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+h1 {
+    font-size: 14px;
+    text-align: center;
+    color: #333;
+    margin-bottom: 20px;
+    cursor: default;
+}
+
+.signup-container {
+    background-color: rgba(255, 255, 255, 0.8);
+    padding: 20px;
+    border-radius: 20px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    width: 300px;
+    text-align: center;
+}
+
+.signup-container img {
+    max-width: 140px;
+    height: auto;
+    margin-bottom: 20px;
+}
+
+.signup-container label {
+    display: block;
+    margin-bottom: 1px;
+    color: black;
+    text-align: left;
+}
+
+.signup-container input {
+    width: calc(100%);
+    padding: 10px;
+    margin-bottom: 10px;
+    border-radius: 10px;
+    box-sizing: border-box;
+    display: inline-block;
+    border: 1px solid #ccc;
+}
+
+.signup-container .password-container {
+    position: relative;
+}
+
+.signup-container .eye-icon {
+    position: absolute;
+    top: 50%;
+    right: 10px;
+    transform: translateY(-60%);
+    cursor: pointer;
+    font-size: 1.5em;
+}
+
+.signup-container button,
+.signup-container .signup-button {
+    padding: 10px;
+    border: none;
+    border-radius: 25px;
+    cursor: pointer;
+    width: 100%;
+    font-size: 16px;
+    text-decoration: none;
+}
+
+.signup-container button {
+    background-color: #D0A2F7;
+    color: #000000;
+    margin-bottom: 0px;
+}
+
+.signup-container button:hover {
+    background-color: #9C73C9;
+    color: #F1EAFF;
+}
+
+input:focus {
+    border: 2px solid #DCBFFF;
+    outline: none;
+}
+
+.center-text {
+    text-align: left;
+    color: #666;
+    margin: 10px 0;
+}
+
+.center-text a {
+    color: #007BFF;
+    text-decoration: none;
+}
