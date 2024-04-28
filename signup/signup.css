@@ -16,7 +16,7 @@ h1 {
     cursor: default;
 }
 
-.login-container {
+.signup-container {
     background-color: rgba(255, 255, 255, 0.8);
     padding: 20px;
     border-radius: 20px;
@@ -25,20 +25,20 @@ h1 {
     text-align: center;
 }
 
-.login-container img {
+.signup-container img {
     max-width: 140px;
     height: auto;
     margin-bottom: 20px;
 }
 
-.login-container label {
+.signup-container label {
     display: block;
     margin-bottom: 10px;
     color: black;
     text-align: left;
 }
 
-.login-container input {
+.signup-container input {
     width: calc(100%);
     padding: 10px;
     margin-bottom: 10px;
@@ -60,7 +60,7 @@ h1 {
     cursor: pointer;
 }
 
-.login-container button {
+.signup-container button {
     padding: 10px;
     border: none;
     border-radius: 25px;
@@ -73,7 +73,7 @@ h1 {
     margin-bottom: 0px;
 }
 
-.login-container button:hover {
+.signup-container button:hover {
     background-color: #9C73C9;
     color: #F1EAFF;
 }
