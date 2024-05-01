@@ -11,9 +11,7 @@ include 'connection.php';
     <link rel="stylesheet" href="viewnote.css">
     
 </head>
-<body> <div id="notes">
-    <h1>NOTES</h1>
-</div>
+<body>
      <?php
 // Check if user is logged in (assuming email is stored in session)
 if (!isset($_SESSION['email'])) {

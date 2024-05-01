@@ -9,7 +9,7 @@ body {
 }
 
 h1 {
-    font-size: 14px;
+    font-size: 24px;
     text-align: center;
     color: #333;
     margin-bottom: 20px;
@@ -33,7 +33,7 @@ h1 {
 
 .signup-container label {
     display: block;
-    margin-bottom: 1px;
+    margin-bottom: 10px;
     color: black;
     text-align: left;
 }
@@ -48,21 +48,19 @@ h1 {
     border: 1px solid #ccc;
 }
 
-.signup-container .password-container {
+.password-container {
     position: relative;
+    margin-bottom: 10px;
 }
 
-.signup-container .eye-icon {
+#eyeIcon {
     position: absolute;
-    top: 50%;
-    right: 10px;
-    transform: translateY(-60%);
+    top: 54%;
+    right: 620px;
     cursor: pointer;
-    font-size: 1.5em;
 }
 
-.signup-container button,
-.signup-container .signup-button {
+.signup-container button {
     padding: 10px;
     border: none;
     border-radius: 25px;
@@ -70,9 +68,6 @@ h1 {
     width: 100%;
     font-size: 16px;
     text-decoration: none;
-}
-
-.signup-container button {
     background-color: #D0A2F7;
     color: #000000;
     margin-bottom: 0px;

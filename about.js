@@ -54,7 +54,7 @@ $(document).ready(function() {
     });
 
     $("#joinNow").on("click", function() {
-        window.location.href = 'login.html';
+        window.location.href = 'signup.php';
     });
 
     showPage(currentPage);

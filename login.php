@@ -5,8 +5,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="login.css">
- <link rel="stylesheet" type="text/css" href="https://unpkg.com/phosphor-icons/css/phosphor.css">
-
     <title>Login</title>
 </head>
 
@@ -20,7 +18,7 @@
             <input type="email" id="useremail" name="email" required>
             <label for="password">Password:</label>
             <input type="password" id="password" name="passwd" required>
-            <i class="ph ph-eye" onclick="togglePassword()"></i>
+            <img src="eye.svg" id="eyeIcon" alt="Eye Icon" onclick="togglePassword()">
             <button type="submit" name="submit" value="submit">Login</button>
             <p class="center-text">Don't have an account? <a href="signup.php">Sign Up here</a>.</p>
         </form>

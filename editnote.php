@@ -28,7 +28,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['id'])) {
 
         if ($result) {
             echo " record updated successfully.";
-            // header("Location: viewnote.php"); // Redirect to notes
+             header("Location: viewnote.php"); // Redirect to notes
             exit();
         } else {
             echo "Error updating record: " . mysqli_error($conn);

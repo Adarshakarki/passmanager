@@ -19,7 +19,7 @@
             <input type="email" id="email" name="email" required>
             <label for="password">Password:</label>
             <input type="password" id="passwd" name="passwd" required>
-            <i class="ph ph-eye" onclick="togglePassword()"></i>
+            <img src="eye.svg" id="eyeIcon" alt="Eye Icon" onclick="togglePassword()">
             <button type="submit">Sign Up</button>
         </form>
         <p class="center-text">Already have an account? <a href="login.php">Login</a></p>
